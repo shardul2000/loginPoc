@@ -1,28 +1,46 @@
 import Head from 'next/head'
 import Image from 'next/image'
-
 import styles from '../styles/Home.module.css'
+import { useEffect } from 'react';
+import { useState } from 'react';
+
 export default function Home() {
 
+   const[ourData, setOurData]=useState([]);
+   const[erro, setErro]=useState();
+   
+  //let data;
 
-  //define what we wanna send to api route /api/express
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: 'React POST Request Example' })
-  };
-  
-  //make http post request to our api:
-  const response =  fetch('http://localhost:3000/api/express', requestOptions)
+  useEffect(() => {
+    fetch('http://localhost:3000/api/express')
+    .then(response=>{ 
+       let data=response.json();
+       return data;
+    })
+    .then(data=>{
+       // console.log(data);
+        setOurData(data);
+        
+      }
+      ).catch(
+        (e)=>{
+          setErro(e);
+        }
+      )
+    }, [])
+console.log('eeerorr'+ erro);
+  var fullname = ourData.cn;
+  var group = ourData.description;
+  var mail= ourData.mail;
 
-  //response is a promise object. figure out how to extract our data from promise object:
-  // const data =  response.then();
   
-  console.log("we got errro booo"+ response);
- 
   return (
-    <div className={styles.container}>
-      
-    </div>
-  )
+  <div>
+    {
+   fullname
+    }
+  </div>
+
+  );
 }
+
